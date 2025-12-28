@@ -1,38 +1,59 @@
-target/
-.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+# Scheduly App - Git Ignore configuration
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
+# Dependencies
+node_modules/
+dist/
+web-build/
 
-### IntelliJ IDEA ###
-.idea
-/.idea
-*.iws
+# Expo and Metro
+.expo/
+.metro-health-check*
+expo-env.d.ts
+
+# Debug and Logs
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+*.log
+logs/
+
+# Native (Android/iOS builds)
+/ios
+/android
+.kotlin/
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+
+# IDEs and System
+.idea/
+.vscode/ (except extensions.json and settings.json if needed)
 *.iml
-*.ipr
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
+# Environment Variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env*.local
+
+# Typescript
+*.tsbuildinfo
+
+# Temporary Files
+tmp/
+temp/
+
+# Scheduly Specific
+app-example/
 
 ### VS Code ###
 .vscode/
-
-### Logs ###
-logs/
-*.log
-*.log.*

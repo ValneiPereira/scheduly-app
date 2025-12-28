@@ -1,9 +1,9 @@
 import React from 'react';
 import {
-    TouchableOpacity,
-    Text,
-    StyleSheet,
     ActivityIndicator,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
     TouchableOpacityProps
 } from 'react-native';
 import { theme } from '../theme';
@@ -35,9 +35,9 @@ export const Button: React.FC<ButtonProps> = ({
             {...props}
         >
             {loading ? (
-                <ActivityIndicator color="#FFF" />
+                <ActivityIndicator color={isPrimary ? theme.colors.textDark : theme.colors.primary} />
             ) : (
-                <Text style={styles.text}>{title}</Text>
+                <Text style={[styles.text, !isPrimary && styles.secondaryText]}>{title}</Text>
             )}
         </TouchableOpacity>
     );
@@ -55,12 +55,16 @@ const styles = StyleSheet.create({
         backgroundColor: theme.colors.primary,
     },
     secondary: {
-        backgroundColor: theme.colors.secondary,
+        backgroundColor: 'transparent',
+        borderWidth: 1,
+        borderColor: theme.colors.primary,
     },
     text: {
-        color: '#FFF',
+        color: theme.colors.textDark,
         fontSize: theme.typography.button.fontSize,
         fontWeight: theme.typography.button.fontWeight as any,
     },
+    secondaryText: {
+        color: theme.colors.primary,
+    }
 });
-
