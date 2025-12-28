@@ -1,21 +1,22 @@
 export const theme = {
   colors: {
-    primary: '#D53F8C', // Pink 600
-    primaryLight: '#ED64A6', // Pink 400
-    primaryDark: '#B83280', // Pink 700
-    
-    secondary: '#805AD5', // Purple 600
-    
-    background: '#FFFFFF',
-    surface: '#F7FAFC', // Gray 50
-    
-    text: '#2D3748', // Gray 800
-    textSecondary: '#718096', // Gray 600
-    
-    error: '#E53E3E', // Red 600
-    success: '#38A169', // Green 600
-    
-    border: '#E2E8F0', // Gray 200
+    primary: '#FED31A', // Bright Yellow (Brand)
+    primaryLight: '#FFE163',
+    primaryDark: '#C7A200',
+
+    secondary: '#FFFFFF', // White for secondary actions/text
+
+    background: '#002D72', // Deep Navy Blue
+    surface: '#003A8C', // Lighter Navy for cards/inputs
+
+    text: '#FFFFFF', // White text for blue background
+    textDark: '#1A202C', // Dark text for yellow background
+    textSecondary: '#A0AEC0', // Gray 400
+
+    error: '#FC8181', // Lighter Red for dark background
+    success: '#68D391', // Lighter Green for dark background
+
+    border: '#2D3748', // Dark border
   },
   spacing: {
     xs: 4,

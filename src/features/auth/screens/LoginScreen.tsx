@@ -1,19 +1,21 @@
+import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import {
-    View,
-    Text,
-    StyleSheet,
-    SafeAreaView,
-    TouchableOpacity,
     KeyboardAvoidingView,
     Platform,
-    ScrollView
+    SafeAreaView,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View
 } from 'react-native';
-import { theme } from '../../../theme';
-import { Input } from '../../../components/Input';
 import { Button } from '../../../components/Button';
+import { Input } from '../../../components/Input';
+import { theme } from '../../../theme';
 
 export const LoginScreen = () => {
+    const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [form, setForm] = useState({
         email: '',
@@ -28,6 +30,10 @@ export const LoginScreen = () => {
         }, 1500);
     };
 
+    const handleGoToRegister = () => {
+        router.push('/register');
+    };
+
     return (
         <SafeAreaView style={styles.safeArea}>
             <KeyboardAvoidingView
@@ -36,8 +42,8 @@ export const LoginScreen = () => {
             >
                 <ScrollView contentContainerStyle={styles.container}>
                     <View style={styles.header}>
-                        <Text style={styles.title}>Bem-vinda!</Text>
-                        <Text style={styles.subtitle}>Acesse sua conta para gerenciar seus agendamentos.</Text>
+                        <Text style={styles.title}>Marca aí</Text>
+                        <Text style={styles.subtitle}>Bem-vindo(a)! Acesse sua conta para gerenciar seus agendamentos de forma simples.</Text>
                     </View>
 
                     <View style={styles.form}>
@@ -72,7 +78,7 @@ export const LoginScreen = () => {
 
                     <View style={styles.footer}>
                         <Text style={styles.footerText}>Não tem uma conta?</Text>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={handleGoToRegister}>
                             <Text style={styles.linkText}>Cadastre-se</Text>
                         </TouchableOpacity>
                     </View>
@@ -85,29 +91,37 @@ export const LoginScreen = () => {
 const styles = StyleSheet.create({
     safeArea: {
         flex: 1,
-        backgroundColor: theme.colors.background,
+        backgroundColor: theme.colors.primary,
     },
     container: {
-        padding: theme.spacing.lg,
         flexGrow: 1,
-        justifyContent: 'center',
+        backgroundColor: theme.colors.background,
     },
     header: {
-        marginBottom: theme.spacing.xl,
+        backgroundColor: theme.colors.primary,
+        paddingHorizontal: theme.spacing.lg,
+        paddingTop: theme.spacing.xl * 2,
+        paddingBottom: theme.spacing.xl,
+        borderBottomLeftRadius: 32,
+        borderBottomRightRadius: 32,
     },
     title: {
         fontSize: 32,
         fontWeight: '700',
-        color: theme.colors.primary,
+        color: theme.colors.textDark,
         marginBottom: theme.spacing.sm,
     },
     subtitle: {
         fontSize: theme.typography.subtitle.fontSize,
-        color: theme.colors.textSecondary,
+        color: theme.colors.textDark,
+        opacity: 0.8,
         lineHeight: 22,
     },
     form: {
+        flex: 1,
         width: '100%',
+        padding: theme.spacing.lg,
+        marginTop: theme.spacing.md,
     },
     button: {
         marginTop: theme.spacing.md,
@@ -117,14 +131,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     forgotPasswordText: {
-        color: theme.colors.textSecondary,
+        color: theme.colors.primary,
         fontSize: 14,
-        textDecorationLine: 'underline',
+        fontWeight: '600',
     },
     footer: {
         flexDirection: 'row',
         justifyContent: 'center',
-        marginTop: theme.spacing.xl,
+        paddingBottom: theme.spacing.xl,
         gap: 4,
     },
     footerText: {

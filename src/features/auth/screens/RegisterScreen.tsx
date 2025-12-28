@@ -1,18 +1,21 @@
+import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import {
-    View,
-    Text,
-    StyleSheet,
+    KeyboardAvoidingView,
+    Platform,
     SafeAreaView,
     ScrollView,
-    KeyboardAvoidingView,
-    Platform
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View
 } from 'react-native';
-import { theme } from '../../../theme';
-import { Input } from '../../../components/Input';
 import { Button } from '../../../components/Button';
+import { Input } from '../../../components/Input';
+import { theme } from '../../../theme';
 
 export const RegisterScreen = () => {
+    const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [form, setForm] = useState({
         name: '',
@@ -27,6 +30,7 @@ export const RegisterScreen = () => {
         setTimeout(() => {
             setLoading(false);
             alert('Cadastro realizado com sucesso! (Teste)');
+            router.back();
         }, 2000);
     };
 
@@ -38,8 +42,8 @@ export const RegisterScreen = () => {
             >
                 <ScrollView contentContainerStyle={styles.container}>
                     <View style={styles.header}>
-                        <Text style={styles.title}>Cadastrar Cliente</Text>
-                        <Text style={styles.subtitle}>Crie uma nova conta para começar seus agendamentos.</Text>
+                        <Text style={styles.title}>Criar Conta</Text>
+                        <Text style={styles.subtitle}>Bem-vindo(a)! Cadastre-se para agendar seus serviços de beleza, bem-estar e saúde com facilidade.</Text>
                     </View>
 
                     <View style={styles.form}>
@@ -81,6 +85,13 @@ export const RegisterScreen = () => {
                             loading={loading}
                             style={styles.button}
                         />
+
+                        <TouchableOpacity
+                            onPress={() => router.back()}
+                            style={styles.backButton}
+                        >
+                            <Text style={styles.backButtonText}>Já tem uma conta? Entrar</Text>
+                        </TouchableOpacity>
                     </View>
                 </ScrollView>
             </KeyboardAvoidingView>
@@ -91,31 +102,48 @@ export const RegisterScreen = () => {
 const styles = StyleSheet.create({
     safeArea: {
         flex: 1,
-        backgroundColor: theme.colors.background,
+        backgroundColor: theme.colors.primary,
     },
     container: {
-        padding: theme.spacing.lg,
         flexGrow: 1,
+        backgroundColor: theme.colors.background,
     },
     header: {
-        marginTop: theme.spacing.xl,
-        marginBottom: theme.spacing.xl,
+        backgroundColor: theme.colors.primary,
+        paddingHorizontal: theme.spacing.lg,
+        paddingTop: theme.spacing.xl * 2,
+        paddingBottom: theme.spacing.xl,
+        borderBottomLeftRadius: 32,
+        borderBottomRightRadius: 32,
     },
     title: {
         fontSize: theme.typography.h1.fontSize,
         fontWeight: theme.typography.h1.fontWeight as any,
-        color: theme.colors.primary,
+        color: theme.colors.textDark,
         marginBottom: theme.spacing.sm,
     },
     subtitle: {
         fontSize: theme.typography.subtitle.fontSize,
-        color: theme.colors.textSecondary,
+        color: theme.colors.textDark,
+        opacity: 0.8,
+        lineHeight: 22,
     },
     form: {
         flex: 1,
+        padding: theme.spacing.lg,
         marginTop: theme.spacing.md,
     },
     button: {
         marginTop: theme.spacing.xl,
+    },
+    backButton: {
+        marginTop: theme.spacing.lg,
+        alignItems: 'center',
+        marginBottom: theme.spacing.xl,
+    },
+    backButtonText: {
+        color: theme.colors.primary,
+        fontSize: 16,
+        fontWeight: '600',
     }
 });
