@@ -56,7 +56,6 @@ temp/
 app-example/
 
 ### VS Code ###
-.vscode
 .vscode/
 
 
