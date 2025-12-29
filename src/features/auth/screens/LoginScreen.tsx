@@ -13,6 +13,7 @@ import {
 import { Button } from '../../../components/Button';
 import { Input } from '../../../components/Input';
 import { theme } from '../../../theme';
+import { authService } from '../../../services/auth.service';
 
 export const LoginScreen = () => {
     const router = useRouter();
@@ -22,12 +23,22 @@ export const LoginScreen = () => {
         password: ''
     });
 
-    const handleLogin = () => {
+    const handleLogin = async () => {
+        if (!form.email || !form.password) {
+            alert('Por favor, preencha todos os campos.');
+            return;
+        }
+
         setLoading(true);
-        setTimeout(() => {
+        try {
+            const response = await authService.login(form);
+            console.log('Login success:', response);
+            router.replace('/home');
+        } catch (error) {
+            alert('Erro ao realizar login. Verifique suas credenciais.');
+        } finally {
             setLoading(false);
-            alert('Login realizado! (Simulação)');
-        }, 1500);
+        }
     };
 
     const handleGoToRegister = () => {
@@ -42,8 +53,8 @@ export const LoginScreen = () => {
             >
                 <ScrollView contentContainerStyle={styles.container}>
                     <View style={styles.header}>
-                        <Text style={styles.title}>Marca aí</Text>
-                        <Text style={styles.subtitle}>Bem-vindo(a)! Acesse sua conta para gerenciar seus agendamentos de forma simples.</Text>
+                        <Text style={styles.title}>Tá Marcado!</Text>
+                        <Text style={styles.subtitle}>Sua agenda, simplificada. Acesse sua conta para gerenciar seus horários com elegância.</Text>
                     </View>
 
                     <View style={styles.form}>

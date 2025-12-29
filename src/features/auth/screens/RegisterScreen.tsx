@@ -13,6 +13,7 @@ import {
 import { Button } from '../../../components/Button';
 import { Input } from '../../../components/Input';
 import { theme } from '../../../theme';
+import { authService } from '../../../services/auth.service';
 
 export const RegisterScreen = () => {
     const router = useRouter();
@@ -21,17 +22,26 @@ export const RegisterScreen = () => {
         name: '',
         email: '',
         cpf: '',
-        phone: ''
+        phone: '',
+        password: ''
     });
 
-    const handleRegister = () => {
+    const handleRegister = async () => {
+        if (!form.name || !form.email || !form.cpf || !form.phone || !form.password) {
+            alert('Por favor, preencha todos os campos.');
+            return;
+        }
+
         setLoading(true);
-        // Simulação de chamada à API
-        setTimeout(() => {
-            setLoading(false);
-            alert('Cadastro realizado com sucesso! (Teste)');
+        try {
+            await authService.register(form);
+            alert('Cadastro realizado com sucesso! Agora você pode fazer login.');
             router.back();
-        }, 2000);
+        } catch (error) {
+            alert('Erro ao realizar cadastro. Verifique os dados e tente novamente.');
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -42,8 +52,8 @@ export const RegisterScreen = () => {
             >
                 <ScrollView contentContainerStyle={styles.container}>
                     <View style={styles.header}>
-                        <Text style={styles.title}>Criar Conta</Text>
-                        <Text style={styles.subtitle}>Bem-vindo(a)! Cadastre-se para agendar seus serviços de beleza, bem-estar e saúde com facilidade.</Text>
+                        <Text style={styles.title}>Tá Marcado!</Text>
+                        <Text style={styles.subtitle}>Crie sua conta agora e comece a organizar sua agenda de forma elegante e inteligente.</Text>
                     </View>
 
                     <View style={styles.form}>
@@ -77,6 +87,14 @@ export const RegisterScreen = () => {
                             keyboardType="phone-pad"
                             value={form.phone}
                             onChangeText={(text) => setForm(prev => ({ ...prev, phone: text }))}
+                        />
+
+                        <Input
+                            label="Senha"
+                            placeholder="Mínimo 6 caracteres"
+                            secureTextEntry
+                            value={form.password}
+                            onChangeText={(text) => setForm(prev => ({ ...prev, password: text }))}
                         />
 
                         <Button

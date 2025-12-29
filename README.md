@@ -1,6 +1,6 @@
-# Marca aí 📱
+# Tá Marcado! 📱
 
-O **Marca aí** é o aplicativo definitivo para agendamento de serviços de beleza, bem-estar e saúde.
+O **Tá Marcado!** é o aplicativo definitivo para agendamento de serviços de beleza, bem-estar e saúde. Projetado para oferecer uma experiência premium e intuitiva, conectando clientes aos melhores profissionais de forma rápida e elegante.
 
 ## 🚀 Como começar
 
@@ -31,26 +31,34 @@ O projeto segue uma estrutura baseada em funcionalidades (*Features*), facilitan
 
 ```text
 src/
-├── api/          # Configuração do Axios e serviços base
+├── api/          # Configuração do Axios (apiClient com Interceptors)
 ├── assets/       # Imagens, ícones e fontes
 ├── components/   # Componentes globais reutilizáveis (UI Kit)
-├── config/       # Variáveis de ambiente e constantes
-├── features/     # Módulos de negócio (Ex: auth, bookings, profile)
-│   └── auth/     # Telas, hooks e store de autenticação
+├── config/       # Configurações de API e constantes
+├── features/     # Módulos de negócio (Ex: auth, home, bookings)
+│   ├── auth/     # Fluxo de Login e Cadastro
+│   ├── home/     # Tela principal e lista de profissionais
+│   └── bookings/ # Fluxo de agendamento e histórico
 ├── hooks/        # React hooks globais
 ├── navigation/   # Configuração e stacks de navegação
-├── store/        # Gerenciamento de estado (Zustand)
-├── theme/        # Design system (Cores, Tipografia)
+├── services/     # Camada de comunicação com a API (Services)
+├── theme/        # Design system (Cores Premium: Azul/Amarelo)
 ├── types/        # Tipagem TypeScript centralizada
 └── utils/        # Funções utilitárias e formatadores
 ```
 
-## 🎨 Design System
-Utilizamos um esquema de cores vibrante (Rosa/Roxo) focado no mercado de estética, com componentes personalizados para garantir uma interface fluida e moderna.
+## 🎨 Design System (Estética Premium)
+Utilizamos um esquema de cores inspirado no profissionalismo e confiança:
+- **Azul Marinho Profundo (#002366)**: Cor dominante que passa segurança e elegância.
+- **Amarelo Vibrante (#FCD12A)**: Cor de destaque para ações principais e cabeçalhos, trazendo energia e visibilidade.
+- **Branco Gelo**: Para garantir máxima leitura e contraste.
 
 ## 🛠️ Tecnologias
 - **React Native** (Via Expo)
 - **TypeScript**
-- **Expo Router** (Navegação baseada em arquivos)
-- **Zustand** (Estado global)
-- **Axios** (Integração com API)
+- **Expo Router** (Navegação moderna baseada em arquivos)
+- **Axios** (Integração real com a Scheduly API)
+- **Lucide / Ionicons** (Iconografia consistente)
+
+---
+© 2025 - Tá Marcado!
