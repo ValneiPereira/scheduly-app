@@ -13,10 +13,12 @@ import { theme } from '../../../theme';
 import { Ionicons } from '@expo/vector-icons';
 import { Button } from '../../../components/Button';
 import { bookingService } from '../../../services/booking.service';
+import { useAuthStore } from '../../../store/useAuthStore';
 
 export const BookingScreen = () => {
     const router = useRouter();
     const params = useLocalSearchParams();
+    const user = useAuthStore(state => state.user);
     const { serviceId, serviceName, professionalId, professionalName } = params;
 
     const [selectedDate, setSelectedDate] = useState<string>('');

@@ -1,14 +1,16 @@
-import { useRouter } from 'expo-router';
+import { useRouter, Link } from 'expo-router';
 import React, { useState } from 'react';
 import {
-    KeyboardAvoidingView,
-    Platform,
+    View,
+    Text,
+    StyleSheet,
     SafeAreaView,
     ScrollView,
-    StyleSheet,
-    Text,
     TouchableOpacity,
-    View
+    StatusBar,
+    Alert,
+    KeyboardAvoidingView,
+    Platform
 } from 'react-native';
 import { Button } from '../../../components/Button';
 import { Input } from '../../../components/Input';
@@ -16,6 +18,7 @@ import { theme } from '../../../theme';
 import { authService } from '../../../services/auth.service';
 
 export const RegisterScreen = () => {
+    console.log('[RegisterScreen] Rendered');
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [form, setForm] = useState({
@@ -27,6 +30,7 @@ export const RegisterScreen = () => {
     });
 
     const handleRegister = async () => {
+        console.log('[Register] Attempting register for:', form.email);
         if (!form.name || !form.email || !form.cpf || !form.phone || !form.password) {
             alert('Por favor, preencha todos os campos.');
             return;
@@ -35,10 +39,12 @@ export const RegisterScreen = () => {
         setLoading(true);
         try {
             await authService.register(form);
+            console.log('[Register] Success!');
             alert('Cadastro realizado com sucesso! Agora você pode fazer login.');
-            router.back();
-        } catch (error) {
-            alert('Erro ao realizar cadastro. Verifique os dados e tente novamente.');
+            router.push('/');
+        } catch (error: any) {
+            console.error('[Register] Error:', error.response?.data || error.message);
+            alert('Não foi possível realizar o cadastro. Verifique os dados ou se o e-mail/CPF já existe.');
         } finally {
             setLoading(false);
         }
@@ -104,12 +110,11 @@ export const RegisterScreen = () => {
                             style={styles.button}
                         />
 
-                        <TouchableOpacity
-                            onPress={() => router.back()}
-                            style={styles.backButton}
-                        >
-                            <Text style={styles.backButtonText}>Já tem uma conta? Entrar</Text>
-                        </TouchableOpacity>
+                        <Link href="/" asChild>
+                            <TouchableOpacity style={styles.backButton}>
+                                <Text style={styles.backButtonText}>Já tem uma conta? Entrar</Text>
+                            </TouchableOpacity>
+                        </Link>
                     </View>
                 </ScrollView>
             </KeyboardAvoidingView>
