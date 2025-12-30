@@ -1,22 +1,23 @@
 export const theme = {
   colors: {
-    primary: '#FED31A', // Bright Yellow (Brand)
+    primary: '#FCD12A', // Amarelo Vibrante (Ação/Destaque)
     primaryLight: '#FFE163',
     primaryDark: '#C7A200',
 
-    secondary: '#FFFFFF', // White for secondary actions/text
+    secondary: '#002366', // Azul Marinho (Background/Cards)
 
-    background: '#002D72', // Deep Navy Blue
-    surface: '#003A8C', // Lighter Navy for cards/inputs
+    background: '#002366', // Azul Marinho Profundo
+    surface: '#003A8C', // Azul um pouco mais claro para inputs/cards
 
-    text: '#FFFFFF', // White text for blue background
-    textDark: '#1A202C', // Dark text for yellow background
-    textSecondary: '#A0AEC0', // Gray 400
+    text: '#FFFFFF', // Texto branco sobre fundo azul
+    textDark: '#1A202C', // Texto escuro sobre fundo amarelo
+    textSecondary: '#A0AEC0', // Cinza azulado para textos menos importantes
 
-    error: '#FC8181', // Lighter Red for dark background
-    success: '#68D391', // Lighter Green for dark background
+    error: '#FC8181',
+    success: '#68D391',
 
-    border: '#2D3748', // Dark border
+    border: '#003A8C', // Borda discreta azul
+    star: '#FFD700', // Dourado das estrelas
   },
   spacing: {
     xs: 4,
@@ -28,12 +29,12 @@ export const theme = {
   borderRadius: {
     sm: 4,
     md: 8,
-    lg: 12,
+    lg: 16,
     full: 999,
   },
   typography: {
     h1: {
-      fontSize: 28,
+      fontSize: 32,
       fontWeight: '700',
     },
     subtitle: {

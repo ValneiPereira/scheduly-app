@@ -1,37 +1,53 @@
-import { useRouter } from 'expo-router';
+import { useRouter, Link } from 'expo-router';
 import React, { useState } from 'react';
 import {
-    KeyboardAvoidingView,
-    Platform,
+    View,
+    Text,
+    StyleSheet,
     SafeAreaView,
     ScrollView,
-    StyleSheet,
-    Text,
     TouchableOpacity,
-    View
+    StatusBar,
+    Alert,
+    KeyboardAvoidingView,
+    Platform
 } from 'react-native';
 import { Button } from '../../../components/Button';
 import { Input } from '../../../components/Input';
 import { theme } from '../../../theme';
+import { authService } from '../../../services/auth.service';
 
 export const RegisterScreen = () => {
+    console.log('[RegisterScreen] Rendered');
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [form, setForm] = useState({
         name: '',
         email: '',
         cpf: '',
-        phone: ''
+        phone: '',
+        password: ''
     });
 
-    const handleRegister = () => {
+    const handleRegister = async () => {
+        console.log('[Register] Attempting register for:', form.email);
+        if (!form.name || !form.email || !form.cpf || !form.phone || !form.password) {
+            alert('Por favor, preencha todos os campos.');
+            return;
+        }
+
         setLoading(true);
-        // Simulação de chamada à API
-        setTimeout(() => {
+        try {
+            await authService.register(form);
+            console.log('[Register] Success!');
+            alert('Cadastro realizado com sucesso! Agora você pode fazer login.');
+            router.push('/');
+        } catch (error: any) {
+            console.error('[Register] Error:', error.response?.data || error.message);
+            alert('Não foi possível realizar o cadastro. Verifique os dados ou se o e-mail/CPF já existe.');
+        } finally {
             setLoading(false);
-            alert('Cadastro realizado com sucesso! (Teste)');
-            router.back();
-        }, 2000);
+        }
     };
 
     return (
@@ -42,8 +58,8 @@ export const RegisterScreen = () => {
             >
                 <ScrollView contentContainerStyle={styles.container}>
                     <View style={styles.header}>
-                        <Text style={styles.title}>Criar Conta</Text>
-                        <Text style={styles.subtitle}>Bem-vindo(a)! Cadastre-se para agendar seus serviços de beleza, bem-estar e saúde com facilidade.</Text>
+                        <Text style={styles.title}>Tá Marcado!</Text>
+                        <Text style={styles.subtitle}>Crie sua conta agora e comece a organizar sua agenda de forma elegante e inteligente.</Text>
                     </View>
 
                     <View style={styles.form}>
@@ -79,6 +95,14 @@ export const RegisterScreen = () => {
                             onChangeText={(text) => setForm(prev => ({ ...prev, phone: text }))}
                         />
 
+                        <Input
+                            label="Senha"
+                            placeholder="Mínimo 6 caracteres"
+                            secureTextEntry
+                            value={form.password}
+                            onChangeText={(text) => setForm(prev => ({ ...prev, password: text }))}
+                        />
+
                         <Button
                             title="Finalizar Cadastro"
                             onPress={handleRegister}
@@ -86,12 +110,11 @@ export const RegisterScreen = () => {
                             style={styles.button}
                         />
 
-                        <TouchableOpacity
-                            onPress={() => router.back()}
-                            style={styles.backButton}
-                        >
-                            <Text style={styles.backButtonText}>Já tem uma conta? Entrar</Text>
-                        </TouchableOpacity>
+                        <Link href="/" asChild>
+                            <TouchableOpacity style={styles.backButton}>
+                                <Text style={styles.backButtonText}>Já tem uma conta? Entrar</Text>
+                            </TouchableOpacity>
+                        </Link>
                     </View>
                 </ScrollView>
             </KeyboardAvoidingView>

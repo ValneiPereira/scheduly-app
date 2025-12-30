@@ -1,33 +1,70 @@
-import { useRouter } from 'expo-router';
-import React, { useState } from 'react';
+import { useRouter, Link } from 'expo-router';
+import React, { useState, useEffect } from 'react';
 import {
-    KeyboardAvoidingView,
-    Platform,
-    SafeAreaView,
-    ScrollView,
-    StyleSheet,
+    View,
     Text,
+    StyleSheet,
+    SafeAreaView,
     TouchableOpacity,
-    View
+    StatusBar,
+    ScrollView,
+    Alert
 } from 'react-native';
 import { Button } from '../../../components/Button';
 import { Input } from '../../../components/Input';
 import { theme } from '../../../theme';
+import { authService } from '../../../services/auth.service';
+import { useAuth } from '../../../store/AuthContext';
 
 export const LoginScreen = () => {
+    console.log('[LoginScreen] Rendered');
     const router = useRouter();
-    const [loading, setLoading] = useState(false);
-    const [form, setForm] = useState({
-        email: '',
-        password: ''
-    });
+    const { setAuth, isAuthenticated } = useAuth();
 
-    const handleLogin = () => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [loading, setLoading] = useState(false);
+
+    /* useEffect(() => {
+        if (isAuthenticated) {
+            console.log('[Auth] User already authenticated, redirecting...');
+            router.replace('/home');
+        }
+    }, [isAuthenticated]); */
+
+    const handleLogin = async () => {
+        console.log('[Login] Attempting login for:', email);
+        if (!email || !password) {
+            alert('Por favor, preencha todos os campos.');
+            return;
+        }
+
         setLoading(true);
-        setTimeout(() => {
+        try {
+            const data = await authService.login({ email, password });
+            console.log('[Login] Success! Received tokens:', !!data.accessToken, !!data.refreshToken);
+
+            // Persiste no AuthContext (que salva no Keychain)
+            await setAuth({
+                accessToken: data.accessToken,
+                refreshToken: data.refreshToken,
+                email: data.email,
+                role: data.role,
+                ownerId: data.ownerId.toString(),
+            });
+
+            router.replace('/home');
+        } catch (error: any) {
+            console.error('[Login] Error:', error.response?.data || error.message);
+            const status = error.response?.status;
+            if (status === 401) {
+                alert('E-mail ou senha inválidos.');
+            } else {
+                alert('Não foi possível falar com o servidor. Verifique se o backend está rodando.');
+            }
+        } finally {
             setLoading(false);
-            alert('Login realizado! (Simulação)');
-        }, 1500);
+        }
     };
 
     const handleGoToRegister = () => {
@@ -36,54 +73,51 @@ export const LoginScreen = () => {
 
     return (
         <SafeAreaView style={styles.safeArea}>
-            <KeyboardAvoidingView
-                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                style={{ flex: 1 }}
-            >
-                <ScrollView contentContainerStyle={styles.container}>
-                    <View style={styles.header}>
-                        <Text style={styles.title}>Marca aí</Text>
-                        <Text style={styles.subtitle}>Bem-vindo(a)! Acesse sua conta para gerenciar seus agendamentos de forma simples.</Text>
-                    </View>
+            <StatusBar barStyle="dark-content" />
+            <ScrollView contentContainerStyle={styles.scrollContent}>
+                <View style={styles.header}>
+                    <Text style={styles.title}>Tá Marcado!</Text>
+                    <Text style={styles.subtitle}>Agende seu horário com os melhores profissionais.</Text>
+                </View>
 
-                    <View style={styles.form}>
-                        <Input
-                            label="E-mail"
-                            placeholder="seu@email.com"
-                            keyboardType="email-address"
-                            autoCapitalize="none"
-                            value={form.email}
-                            onChangeText={(text) => setForm(prev => ({ ...prev, email: text }))}
-                        />
+                <View style={styles.form}>
+                    <Input
+                        label="E-mail"
+                        placeholder="seu@email.com"
+                        value={email}
+                        onChangeText={setEmail}
+                        keyboardType="email-address"
+                        autoCapitalize="none"
+                    />
 
-                        <Input
-                            label="Senha"
-                            placeholder="••••••••"
-                            secureTextEntry
-                            value={form.password}
-                            onChangeText={(text) => setForm(prev => ({ ...prev, password: text }))}
-                        />
+                    <Input
+                        label="Senha"
+                        placeholder="********"
+                        value={password}
+                        onChangeText={setPassword}
+                        secureTextEntry
+                    />
 
-                        <Button
-                            title="Entrar"
-                            onPress={handleLogin}
-                            loading={loading}
-                            style={styles.button}
-                        />
+                    <TouchableOpacity style={styles.forgotPassword}>
+                        <Text style={styles.forgotPasswordText}>Esqueceu a senha?</Text>
+                    </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.forgotPassword}>
-                            <Text style={styles.forgotPasswordText}>Esqueceu a senha?</Text>
-                        </TouchableOpacity>
-                    </View>
+                    <Button
+                        title="Entrar"
+                        onPress={handleLogin}
+                        loading={loading}
+                    />
 
                     <View style={styles.footer}>
                         <Text style={styles.footerText}>Não tem uma conta?</Text>
-                        <TouchableOpacity onPress={handleGoToRegister}>
-                            <Text style={styles.linkText}>Cadastre-se</Text>
-                        </TouchableOpacity>
+                        <Link href="/register" asChild>
+                            <TouchableOpacity>
+                                <Text style={styles.registerLink}>Cadastre-se</Text>
+                            </TouchableOpacity>
+                        </Link>
                     </View>
-                </ScrollView>
-            </KeyboardAvoidingView>
+                </View>
+            </ScrollView>
         </SafeAreaView>
     );
 };
@@ -135,17 +169,21 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: '600',
     },
+    scrollContent: {
+        flexGrow: 1,
+        backgroundColor: theme.colors.background,
+    },
     footer: {
         flexDirection: 'row',
         justifyContent: 'center',
-        paddingBottom: theme.spacing.xl,
+        paddingVertical: theme.spacing.xl,
         gap: 4,
     },
     footerText: {
         color: theme.colors.textSecondary,
         fontSize: 16,
     },
-    linkText: {
+    registerLink: {
         color: theme.colors.primary,
         fontSize: 16,
         fontWeight: '600',
