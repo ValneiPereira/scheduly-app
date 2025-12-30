@@ -1,5 +1,6 @@
 export const API_CONFIG = {
-    // Use 10.0.2.2 para Android Emulator ou seu IP local para dispositivos físicos
-    BASE_URL: 'http://10.0.2.2:8080/api',
+    // 10.0.2.2 é o endereço do host local no Android Emulator
+    // 'localhost' ou seu IP local (ex: 192.168.1.5) para dispositivos físicos ou Web
+    BASE_URL: 'http://192.168.1.39:8080',
     TIMEOUT: 10000,
 };

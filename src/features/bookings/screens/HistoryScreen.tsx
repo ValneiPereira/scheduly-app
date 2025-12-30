@@ -14,17 +14,19 @@ import { theme } from '../../../theme';
 import { Ionicons } from '@expo/vector-icons';
 import { bookingService } from '../../../services/booking.service';
 import { BookingResponse, BookingStatus } from '../../../types/booking';
+import { useAuthStore } from '../../../store/useAuthStore';
 
 export const HistoryScreen = () => {
     const router = useRouter();
+    const user = useAuthStore(state => state.user);
     const [bookings, setBookings] = useState<BookingResponse[]>([]);
     const [loading, setLoading] = useState(true);
 
     const fetchBookings = async () => {
+        if (!user?.ownerId) return;
         setLoading(true);
         try {
-            // Em um cenário real, o ID viria do Contexto de Auth
-            const data = await bookingService.listByClient(1);
+            const data = await bookingService.listByClient(user.ownerId);
             setBookings(data);
         } catch (error) {
             console.error('Erro ao buscar históricos:', error);

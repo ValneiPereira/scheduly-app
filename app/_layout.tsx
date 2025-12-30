@@ -1,14 +1,13 @@
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
+import { AuthProvider } from '../src/store/AuthContext';
 
 export default function RootLayout() {
   return (
-    <>
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="index" />
-      </Stack>
+    <AuthProvider>
+      <Stack screenOptions={{ headerShown: false }} />
       <StatusBar style="auto" />
-    </>
+    </AuthProvider>
   );
 }
