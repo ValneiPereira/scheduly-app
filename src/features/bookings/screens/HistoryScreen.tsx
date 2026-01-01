@@ -14,19 +14,19 @@ import { theme } from '../../../theme';
 import { Ionicons } from '@expo/vector-icons';
 import { bookingService } from '../../../services/booking.service';
 import { BookingResponse, BookingStatus } from '../../../types/booking';
-import { useAuthStore } from '../../../store/useAuthStore';
+import { useAuth } from '../../../store/AuthContext';
 
 export const HistoryScreen = () => {
     const router = useRouter();
-    const user = useAuthStore(state => state.user);
+    const { ownerId } = useAuth();
     const [bookings, setBookings] = useState<BookingResponse[]>([]);
     const [loading, setLoading] = useState(true);
 
     const fetchBookings = async () => {
-        if (!user?.ownerId) return;
+        if (!ownerId) return;
         setLoading(true);
         try {
-            const data = await bookingService.listByClient(user.ownerId);
+            const data = await bookingService.listByClient(Number(ownerId));
             setBookings(data);
         } catch (error) {
             console.error('Erro ao buscar históricos:', error);

@@ -13,12 +13,12 @@ import { theme } from '../../../theme';
 import { Ionicons } from '@expo/vector-icons';
 import { Button } from '../../../components/Button';
 import { bookingService } from '../../../services/booking.service';
-import { useAuthStore } from '../../../store/useAuthStore';
+import { useAuth } from '../../../store/AuthContext';
 
 export const BookingScreen = () => {
     const router = useRouter();
     const params = useLocalSearchParams();
-    const user = useAuthStore(state => state.user);
+    const { ownerId } = useAuth();
     const { serviceId, serviceName, professionalId, professionalName } = params;
 
     const [selectedDate, setSelectedDate] = useState<string>('');
@@ -43,9 +43,8 @@ export const BookingScreen = () => {
 
         setLoading(true);
         try {
-            // No mundo real, precisaríamos do clientId do estado global/auth context
             const bookingData = {
-                clientId: 1, // Mock para teste, deve vir do auth
+                clientId: Number(ownerId),
                 professionalId: Number(professionalId),
                 serviceId: Number(serviceId),
                 startAt: `${selectedDate}T${selectedTime}:00`,

@@ -1,4 +1,8 @@
 import * as Keychain from 'react-native-keychain';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Platform } from 'react-native';
+
+const isWeb = Platform.OS === 'web';
 
 /**
  * Serviço de armazenamento seguro usando Keychain (iOS) e Keystore (Android)
@@ -22,6 +26,10 @@ export interface UserData {
  */
 export const saveAccessToken = async (token: string): Promise<void> => {
     try {
+        if (isWeb) {
+            await AsyncStorage.setItem(KEYS.ACCESS_TOKEN, token);
+            return;
+        }
         await Keychain.setGenericPassword(KEYS.ACCESS_TOKEN, token, {
             service: KEYS.ACCESS_TOKEN,
         });
@@ -36,6 +44,9 @@ export const saveAccessToken = async (token: string): Promise<void> => {
  */
 export const getAccessToken = async (): Promise<string | null> => {
     try {
+        if (isWeb) {
+            return await AsyncStorage.getItem(KEYS.ACCESS_TOKEN);
+        }
         const credentials = await Keychain.getGenericPassword({
             service: KEYS.ACCESS_TOKEN,
         });
@@ -51,6 +62,10 @@ export const getAccessToken = async (): Promise<string | null> => {
  */
 export const saveRefreshToken = async (token: string): Promise<void> => {
     try {
+        if (isWeb) {
+            await AsyncStorage.setItem(KEYS.REFRESH_TOKEN, token);
+            return;
+        }
         await Keychain.setGenericPassword(KEYS.REFRESH_TOKEN, token, {
             service: KEYS.REFRESH_TOKEN,
         });
@@ -65,6 +80,9 @@ export const saveRefreshToken = async (token: string): Promise<void> => {
  */
 export const getRefreshToken = async (): Promise<string | null> => {
     try {
+        if (isWeb) {
+            return await AsyncStorage.getItem(KEYS.REFRESH_TOKEN);
+        }
         const credentials = await Keychain.getGenericPassword({
             service: KEYS.REFRESH_TOKEN,
         });
@@ -80,6 +98,10 @@ export const getRefreshToken = async (): Promise<string | null> => {
  */
 export const saveUserData = async (userData: UserData): Promise<void> => {
     try {
+        if (isWeb) {
+            await AsyncStorage.setItem(KEYS.USER_DATA, JSON.stringify(userData));
+            return;
+        }
         await Keychain.setGenericPassword(
             KEYS.USER_DATA,
             JSON.stringify(userData),
@@ -98,6 +120,10 @@ export const saveUserData = async (userData: UserData): Promise<void> => {
  */
 export const getUserData = async (): Promise<UserData | null> => {
     try {
+        if (isWeb) {
+            const data = await AsyncStorage.getItem(KEYS.USER_DATA);
+            return data ? JSON.parse(data) : null;
+        }
         const credentials = await Keychain.getGenericPassword({
             service: KEYS.USER_DATA,
         });
@@ -116,6 +142,10 @@ export const getUserData = async (): Promise<UserData | null> => {
  */
 export const clearAll = async (): Promise<void> => {
     try {
+        if (isWeb) {
+            await AsyncStorage.multiRemove([KEYS.ACCESS_TOKEN, KEYS.REFRESH_TOKEN, KEYS.USER_DATA]);
+            return;
+        }
         await Promise.all([
             Keychain.resetGenericPassword({ service: KEYS.ACCESS_TOKEN }),
             Keychain.resetGenericPassword({ service: KEYS.REFRESH_TOKEN }),
